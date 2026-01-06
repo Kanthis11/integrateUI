@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #4b0082, #800080);
+    color: white;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.button-row {
+    margin: 20px;
+}
+
+.btn {
+    padding: 15px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn.trigger { background-color: #007acc; }
+.btn.status { background-color: #28a745; }
+.btn.console { background-color: #6c757d; }
+.btn.stop { background-color: #dc3545; }
+
+#console {
+    width: 90%;
+    max-height: 400px;
+    overflow: auto;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.5);
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+#status-msg {
+    margin: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}

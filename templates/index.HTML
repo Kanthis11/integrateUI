@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integrate-SalesboxAI Campaign Creation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #4b0082, #800080);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 36px;
+        }
+        .btn {
+            padding: 15px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .trigger { background-color: #007acc; }
+        .status { background-color: #28a745; }
+        .console { background-color: #6c757d; }
+        .stop { background-color: #dc3545; }
+
+        #status-msg {
+            margin: 10px auto;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #console {
+            width: 90%;
+            max-width: 900px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.5);
+            text-align: left;
+            white-space: pre-wrap;
+            border-radius: 8px;
+            font-family: "Fira Code", monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Integrate-SalesboxAI Campaign Creation</h1>
+
+    <div>
+        <button class="btn trigger" onclick="triggerBuild()">Create Campaigns & Assethub</button>
+        <button class="btn status" onclick="getStatus()">Show Status</button>
+        <button class="btn console" onclick="showConsole()">Show Console</button>
+        <button class="btn stop" onclick="stopBuild()">Stop Build</button>
+    </div>
+
+    <div id="status-msg">Status will appear here...</div>
+    <div id="console">Console output will appear here...</div>
+
+    <script>
+        // Trigger build
+        async function triggerBuild() {
+            try {
+                const res = await fetch("/trigger_build", { method: "POST" });
+                const data = await res.json();
+                alert(data.message);
+            } catch (err) {
+                alert("Error triggering build: " + err);
+            }
+        }
+
+        // Stop build
+        async function stopBuild() {
+            try {
+                const res = await fetch("/stop_build", { method: "POST" });
+                const data = await res.json();
+                alert(data.message);
+            } catch (err) {
+                alert("Error stopping build: " + err);
+            }
+        }
+
+        // Get status
+        async function getStatus() {
+            try {
+                const res = await fetch("/status");
+                const data = await res.json();
+                const div = document.getElementById("status-msg");
+                div.innerText = data.message || "No status";
+                div.style.color = data.color || "white";
+            } catch (err) {
+                const div = document.getElementById("status-msg");
+                div.innerText = "Error fetching status";
+                div.style.color = "red";
+                console.log(err);
+            }
+        }
+async function showConsole() {
+    const div = document.getElementById("console");
+
+    try {
+        const res = await fetch("/console");
+        const text = await res.text();
+
+        console.log("RAW RESPONSE:", text);
+
+        // 🚨 HTML guard
+        if (text.trim().startsWith("<")) {
+            div.innerText = "Console not available yet";
+            return;
+        }
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            div.innerText = "Invalid JSON received:\n" + text;
+            return;
+        }
+
+        div.innerText = (data.console || []).join("\n");
+        div.scrollTop = div.scrollHeight;
+
+    } catch (err) {
+        div.innerText = "ERROR:\n" + err.message;
+    }
+}
+
+
+
+
+
+        // Auto-refresh every 5 seconds
+        setInterval(getStatus, 5000);
+        setInterval(showConsole, 5000);
+
+        // Initial load
+        getStatus();
+        showConsole();
+    </script>
+</body>
+</html>
