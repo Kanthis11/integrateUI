@@ -33,7 +33,7 @@ def home():
 @app.route("/trigger_build", methods=["POST"])
 def trigger_build():
     try:
-        url = f"{config.JENKINS_URL}/job/{config.JOB_NAME}/build"
+        url = f"{config.JENKINS_URL}/job/Selenium/job/{config.JOB_NAME}/build"
         response = requests.post(url, auth=HTTPBasicAuth(config.USER, config.API_TOKEN), timeout=5)
         return jsonify({"status": "success", "message": f"Build triggered: {response.status_code}"})
     except Exception as e:
@@ -43,13 +43,13 @@ def trigger_build():
 @app.route("/stop_build", methods=["POST"])
 def stop_build():
     try:
-        url = f"{config.JENKINS_URL}/job/{config.JOB_NAME}/lastBuild/api/json"
+        url = f"{config.JENKINS_URL}/job/Selenium/job/{config.JOB_NAME}/lastBuild/api/json"
         response = requests.get(url, auth=HTTPBasicAuth(config.USER, config.API_TOKEN), timeout=5)
         if response.status_code == 200:
             data = response.json()
             if data.get("building", False):
                 build_number = data.get("number", 0)
-                stop_url = f"{config.JENKINS_URL}/job/{config.JOB_NAME}/{build_number}/stop"
+                stop_url = f"{config.JENKINS_URL}/job/Selenium/job/{config.JOB_NAME}/{build_number}/stop"
                 stop_response = requests.post(stop_url, auth=HTTPBasicAuth(config.USER, config.API_TOKEN), timeout=5)
                 if stop_response.status_code in [200, 201, 302]:
                     return jsonify({"status": "success", "message": f"Build #{build_number} stopped"})
@@ -65,7 +65,7 @@ def stop_build():
 @app.route("/console", methods=["GET"])
 def console_output():
     try:
-        url = f"{config.JENKINS_URL}/job/{config.JOB_NAME}/lastBuild/consoleText"
+        url = f"{config.JENKINS_URL}/job/Selenium/job/{config.JOB_NAME}/lastBuild/consoleText"
         response = requests.get(url, auth=HTTPBasicAuth(config.USER, config.API_TOKEN))
 
         if response.status_code != 200:
@@ -108,7 +108,7 @@ def console_output():
 def status():
     global dot_count
     try:
-        url = f"{config.JENKINS_URL}/job/{config.JOB_NAME}/lastBuild/api/json"
+        url = f"{config.JENKINS_URL}/job/Selenium/job/{config.JOB_NAME}/lastBuild/api/json"
         response = requests.get(url, auth=HTTPBasicAuth(config.USER, config.API_TOKEN), timeout=5)
         if response.status_code == 200:
             data = response.json()
@@ -130,6 +130,7 @@ def status():
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5000)
+
 
 
 
