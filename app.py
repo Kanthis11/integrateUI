@@ -4,8 +4,15 @@ import requests
 import json
 import config
 from requests.auth import HTTPBasicAuth
+import os
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
 CORS(app)  # Allow cross-origin requests if needed
 
 
@@ -117,5 +124,6 @@ def status():
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5000)
+
 
 
