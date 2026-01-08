@@ -7,6 +7,12 @@ from requests.auth import HTTPBasicAuth
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print("🔥 RUNNING app.py FROM:", os.path.abspath(__file__))
+print("🔥 BASE_DIR:", BASE_DIR)
+print("🔥 TEMPLATE DIR EXISTS:",
+      os.path.exists(os.path.join(BASE_DIR, "templates")))
+print("🔥 TEMPLATE FILE EXISTS:",
+      os.path.exists(os.path.join(BASE_DIR, "templates", "index.html")))
 
 app = Flask(
     __name__,
@@ -124,6 +130,7 @@ def status():
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5000)
+
 
 
 
